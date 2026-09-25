@@ -1,0 +1,87 @@
+Definition: 
+study: self-study on university courses only.
+break: other than studing in the study session.
+study session: a period of time dedicated to studying, which may include one or more breaks. But the every break time must be less than studying time.
+study session: study-----break-----study-----break-----...
+
+Q0. What is your assigned course specific ID?
+- [Short Answer]
+
+Q1. How long does your typical study session for university courses last?
+- Less than 1 hour
+- 1 to 1.49 hours
+- 1.5 to 1.99 hours
+- 2 to 2.49 hours
+- 2.5 to 2.99 hours
+- 3 hours or more
+
+Q2. How many times on average do you take a break during this study session?
+- 0 times (No breaks)
+- 1 time
+- 2 times
+- 3 times
+- 4 or more times
+
+Q3. How long does each break last?
+- I do not take breaks
+- Less than 15 minutes
+- 15 to 30 minutes
+- 30 to 45 minutes
+- More than 45 minutes
+
+Q4. If you were to take a test immediately after a study session, what score would you expect to get out of 5? 
+- 0
+- 1
+- 2
+- 3
+- 4
+- 5
+(OR Q7. Thinking about a typical study session, how much of the material do you feel you can remember the next day?
+Question type: Linear scale, 1-5
+1 = Very little; 5 = Almost all of it)
+
+Q5. What do you usually do during your breaks? (Select top 2 you mostly do)
+- social
+- gaming
+- sporting
+- snap
+- other
+
+Q6. How many hours do you study per week?
+- Less than 10 hours
+- 10 to 19 hours
+- 20 to 29 hours
+- 30 to 39 hours
+- 40 hours or more
+
+Q7. Approximately how many chapters do you cover in a single study session? (using STA304 as an example)
+- Less than 1 chapter
+- 1 chapter
+- 2 chapters
+- 3 chapters
+- 4 or more chapters
+
+Q8. What was your grade in STA258H5, STA260H5, STA238H1, STA255H1, or ECO227Y5? (If you have taken multiple, please select the average grade)
+- 90% - 100% (A+)
+- 80% - 89% (A- to A)
+- 70% - 79% (B- to B+)
+- 60% - 69% (C- to C+)
+- 50% - 59% (D- to D+)
+- Below 50%
+- Prefer not to say
+
+Q9. How do you feel about this statement: "Taking a break helps me study more efficiently in the next cycle."
+- Strongly agree
+- Agree
+- Neither agree nor disagree
+- Disagree
+- Strongly disagree
+
+Q10. Where do you study mostly(select top 2 mostly go)
+- home
+- library
+- cafe
+- transit(in bus, subway, train, etc)
+- outdoors(park, beach, etc)
+- lecture hall(but self-study in lecture hall)
+- other
