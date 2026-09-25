@@ -1,0 +1,19 @@
+Proposal Title: Exploring the Relationship Between Study Breaks and Students’ Perceived Study Efficiency and Retention
+
+Research Questions:
+1. (RQ1) Is there an association between a student's study break frequency and their perceived study efficiency in the next cycle?
+2. (RQ2) Is there a linear relationship between study break duration and a student's expected short-term retention (measured by their expected immediate test score)?
+3. (RQ3) Do different types of study break activities lead to significant differences in expected short-term retention?
+
+Target Population: Fall 2026 STA304H5 students.
+
+Sampling Method: Simple Random Sampling (SRS). We will draw a simple random sample from the pool of collected responses from the STA304H5 cohort to ensure our data is unbiased.
+
+Data Collection Methodology: We will distribute the questionnaire online using a Google Form link. The link will be shared through the course's survey exchange platform. As an incentive and to ensure a sufficient sample size, we will actively participate in filling out other groups' questionnaires to encourage reciprocal participation.
+
+Simple Statistical Tests: 
+- Chi-Square Test for Independence. This will be used to address RQ1 by testing whether study break frequency (Q2) is independent of students' perceived study efficiency (Q9).
+- Simple Linear Regression. This will be used to address RQ2 by assessing if study break duration (Q3, converted to numerical midpoints) can linearly predict a student's expected short-term retention score (Q4).
+
+Advanced Statistical Test:
+- ANOVA (Analysis of Variance). This will be used to address RQ3. We will use ANOVA to compare the mean expected short-term retention scores (Q4) across the different types of study break activities (Q5) to determine if the type of break significantly affects retention.
