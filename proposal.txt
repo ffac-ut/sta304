@@ -7,7 +7,7 @@ Research Questions:
 
 Target Population: Fall 2026 STA304H5 students.
 
-Sampling Method: Simple Random Sampling (SRS). We will draw a simple random sample from the pool of collected responses from the STA304H5 cohort to ensure our data is unbiased.
+Sampling Method: Simple Random Sampling (SRS). After responses are collected mostly from STA304H5 students and some of other students through the course survey exchange platform, we will randomly select responses from the pool of qualified respondents for further analysis. We acknowledge that because participation in the initial questionnaire is voluntary, that means: some self-selection bias may still remain.
 
 Data Collection Methodology: We will distribute the questionnaire online using a Google Form link. The link will be shared through the course's survey exchange platform. As an incentive and to ensure a sufficient sample size, we will actively participate in filling out other groups' questionnaires to encourage reciprocal participation.
 
