@@ -1,0 +1,28 @@
+acc submitting the proposal as a text file is crazy (as i send feedback as a text file)
+
+You will need to email me when you have changed your survey for me to post on Piazza.
+
+Disclaimer: in the process of constructing feedback, I recorded my audio and got AI to rephrase my feedback in a concise, clear manner so that I can mark faster + you get more detailed feedback. I did not run any of the assignments through AI.
+
+Chi-square test of independence
+Please do not use the chi-square test of independence to test whether study break frequency is independent of perceived study efficiency. This test is for two categorical variables, and both of yours are quantitative, so it is not appropriate here.
+
+Course-specific ID
+Please make the course-specific ID question mandatory. I need to report this value as reliably as possible so that every student gets the marks for completing surveys.
+
+Ranges and numeric answers
+Many of your questions give predetermined ranges where you could ask for a number. For example, ask students how long they study in minutes or hours, and ask for the number of study hours directly. The same goes for the length of a study break. Ranges throw away information that would help your quantitative analysis.
+
+Rating scales
+Some of your questions use a 1 to 5 scale. Please widen these to 1 to 7 or 1 to 10.
+Your statement about feelings uses a strongly agree to strongly disagree scale. Please add "slightly agree" and "slightly disagree" to give respondents more options. Larger scales work better for quantitative analysis.
+
+Types of study breaks
+Snapchat is an unusual category for study breaks, since students are more likely to use Instagram or TikTok. Consider replacing it with a general "social media" option. You already have an "other" option, which helps.
+
+Question wording
+Please improve the grammar of this question:
+"Where do you study mostly(select top 2 mostly go) *"
+For example: "Where do you study most often? (Select your top 2.)"
+
+Grade (deductions were towards the questionnaire for how the questions are well constructed): 0.8/1
