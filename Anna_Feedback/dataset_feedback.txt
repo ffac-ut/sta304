@@ -1,0 +1,13 @@
+Data cleaning needed
+Your dataset still has uncleaned values that need to be addressed before this checkpoint. (-0.05)
+
+Under study location, one entry reads "GFUIH", which does not look like a valid location. If this came through your "other" option, it may be a left blank or garbled entry.
+
+Several course-specific ID entries are obviously invalid. One entry is a URL to the survey itself. Another entry has its url in brackets.
+
+Under weekly study hours, the entry for course ID tomato521 contains a range instead of a single number. Please check your dataset for other instances of this and clean them, since you cannot load data like this directly into R without addressing it first.
+
+Codebook corrections
+Your codebook entry for break_duration_minutes describes the variable as a non-negative duration in minutes represented by a midpoint. Your questionnaire asks for a number directly rather than a range, so there should be no midpoint involved here. Please correct this entry to match what you actually collected. (-0.05)
+
+0.9/1
