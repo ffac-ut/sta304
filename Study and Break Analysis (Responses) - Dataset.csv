@@ -1,22 +1,22 @@
 timestamp,studentID,study_session_min,num_breaks,break_duration_min,memory_retention,break_activities,weekly_study_hours,year_of_study,prior_grade_pct,break_helps_efficiency,study_location,data_notes
-10/5/2026 10:54:44,gamerz932,240,6,10,6,"Social, Napping, Eating",900,3,75,7,"Home, Library",
-10/5/2026 12:26:00,necklace24,120,1,15,9,Social,2800,3,75,6,"Home, Library",
+10/5/2026 10:54:44,gamerz932,240,6,10,6,"Social, Napping, Eating",900,3,75,7,"Home, Library",weekly_study_hours: Exceeds 168 hours per week; units/value require verification before analysis. Original value retained.
+10/5/2026 12:26:00,necklace24,120,1,15,9,Social,2800,3,75,6,"Home, Library",weekly_study_hours: Exceeds 168 hours per week; units/value require verification before analysis. Original value retained.
 10/5/2026 14:38:23,Engineering941,45,1,10,6,"Social, Napping, Eating",10,4,65,6,"Home, Library, Cafe",
 10/5/2026 14:43:31,LunarFinch,240,4,15,6,"Gaming, Napping",15,4,95,6,"Home, Lecture hall(but self-study in lecture hall)",
-10/5/2026 15:19:28,wwAll,120,2,5,7,Social,600,3,65,6,gfuih,
-10/5/2026 23:07:27,handbag035,120,2,10,6,"Social, Exercise",600,4,65,7,"Home, Library",
+10/5/2026 15:19:28,wwAll,120,2,5,7,Social,600,3,65,6,,"study_location: Uninterpretable location recorded as missing. Original: ""gfuih"". weekly_study_hours: Exceeds 168 hours per week; units/value require verification before analysis. Original value retained."
+10/5/2026 23:07:27,handbag035,120,2,10,6,"Social, Exercise",600,4,65,7,"Home, Library",weekly_study_hours: Exceeds 168 hours per week; units/value require verification before analysis. Original value retained.
 10/5/2026 23:28:11,STA260,240,2,25,5,"Social, Gaming",12,1,75,6,"Home, Library",
-10/5/2026 23:52:44,https://docs.google.com/forms/d/e/1FAIpQLSfWBFiDZmcYEh11kP_ojRl8djZNyU7ppC2jlW-wzZd-qUVYnA/viewform,120,6,5,7,"Social, Gaming",4,3,75,4,"Home, Library",
+10/5/2026 23:52:44,,120,6,5,7,"Social, Gaming",4,3,75,4,"Home, Library","studentID: URL-only response; ID recorded as missing; response retained for eligibility review. Original: ""https://docs.google.com/forms/d/e/1FAIpQLSfWBFiDZmcYEh11kP_ojRl8djZNyU7ppC2jlW-wzZd-qUVYnA/viewform""."
 10/5/2026 23:53:54,CHIPOTLE33,60,5,10,7,Social,5,4,75,5,"Home, Library",
 10/6/2026 9:16:11,I_LOVE_STA314,120,6,5,6,"Social, Gaming",5,1,75,6,"Home, Transit(in bus, subway, train, etc)",
 10/6/2026 11:02:38,I_LOVE_STA348,180,1,10,8,"Social, Eating",25,3,75,4,"Home, Library, Cafe, Lecture hall(but self-study in lecture hall)",
-10/6/2026 16:14:17,MapleGlitch,120,20,20,7,Gaming,20,4,75,6,Library,
+10/6/2026 16:14:17,MapleGlitch,120,20,20,7,Gaming,20,4,75,6,Library,num_breaks: Break count multiplied by duration meets/exceeds reported session length; verify interpretation and values before analysis. Original value retained.
 10/6/2026 18:05:23,Ikea123,120,3,10,6,"Social, Exercise",15,3,75,5,"Home, Transit(in bus, subway, train, etc)",
 10/6/2026 21:28:44,STA262,120,3,15,6,Social,7,3,65,6,"Home, Library",
 10/7/2026 15:31:13,I_LOVE_STA360,75,2,15,6,"Social, Exercise",19,1,75,5,"Home, UTM buildings like IB or MN",
 10/7/2026 16:22:06,SilentAnchor,240,2,10,7,Social,15,3,95,7,"Library, Cafe",
-10/7/2026 17:21:47,03Marketplace,80,30,60,5,"Social, Gaming",15,3,85,5,"Home, Library",
-10/7/2026 19:20:54,STA258,30,1,10,6,Gaming,17,3, ,6,"Home, Library, Lecture hall(but self-study in lecture hall)",
+10/7/2026 17:21:47,03Marketplace,80,30,60,5,"Social, Gaming",15,3,85,5,"Home, Library",num_breaks: Break count multiplied by duration meets/exceeds reported session length; verify interpretation and values before analysis. Original value retained.
+10/7/2026 19:20:54,STA258,30,1,10,6,Gaming,17,3,,6,"Home, Library, Lecture hall(but self-study in lecture hall)","prior_grade_pct: Whitespace-only missing entry standardized to blank. Original: "" ""."
 10/7/2026 20:43:52,Laptop27,180,3,10,7,"Social, Space out",10,3,75,6,"Home, Library",
 10/7/2026 21:52:58,MossyCircuit,60,2,5,7,Social,15,3,85,6,"Home, University Buildings (e.g. MN)",
 10/8/2026 9:47:32,Notebook24,180,3,10,7,"Social, Eating",22,3,75,6,"Home, Library, Lecture hall(but self-study in lecture hall)",
@@ -27,32 +27,32 @@ timestamp,studentID,study_session_min,num_breaks,break_duration_min,memory_reten
 10/8/2026 18:19:01,STA256,120,1,10,5,"Social, Gaming, Exercise, Napping, Eating",8,3,75,6,"Home, Library",
 10/8/2026 19:02:00,cats88,90,2,30,6,"Social, Gaming",7,3,55,6,Home,
 10/9/2026 0:14:38,VelvetHazard,120,1,20,6,"Social, Eating",20,4,75,4,"Home, Library",
-10/9/2026 3:06:47,ForbiddenForms,120,2,10-15,7,"Social, Scrolling",15,4,85,6,"Home, Library",
-10/9/2026 4:34:48,Microphone25,60,5,20,3,"Social, Eating, Phone",5,4,75,5,Home,
-10/9/2026 10:55:30,tomato521,60,1,10,6,"Social, Napping",15-20,4,75,6,"Home, Library",
+10/9/2026 3:06:47,ForbiddenForms,120,2,,7,"Social, Scrolling",15,4,85,6,"Home, Library","break_duration_min: Range response recorded as missing pending clarification; no midpoint imputed. Original: ""10-15""."
+10/9/2026 4:34:48,Microphone25,60,5,20,3,"Social, Eating, Phone",5,4,75,5,Home,num_breaks: Break count multiplied by duration meets/exceeds reported session length; verify interpretation and values before analysis. Original value retained.
+10/9/2026 10:55:30,tomato521,60,1,10,6,"Social, Napping",,4,75,6,"Home, Library","weekly_study_hours: Range response recorded as missing pending clarification; no midpoint imputed. Original: ""15-20""."
 10/9/2026 11:20:55,00with00,120,3,20,7,"Social, Gaming, Exercise",7,4,65,5,"Home, Library",
-10/9/2026 11:52:33,toobusy682 (https://tinyurl.com/coop304),120,4,40,8,"Social, Gaming, Napping, Eating",18,4,75,4,"Home, Library, Cafe",
+10/9/2026 11:52:33,toobusy682,120,4,40,8,"Social, Gaming, Napping, Eating",18,4,75,4,"Home, Library, Cafe","studentID: Removed appended URL; retained supplied ID, not yet roster-verified. Original: ""toobusy682 (https://tinyurl.com/coop304)"". num_breaks: Break count multiplied by duration meets/exceeds reported session length; verify interpretation and values before analysis. Original value retained."
 10/9/2026 12:24:19,Feet835,180,3,15,7,"Social, Eating",20,4,75,6,"Home, Lecture hall(but self-study in lecture hall)",
 10/9/2026 12:25:07,aaTheaa,60,1,5,6,Social,6,4,65,7,"Home, Library",
 10/9/2026 12:25:15,Zoroarkqqq,120,2,15,5,"Social, Napping",14,3,75,6,"Home, Library",
 10/9/2026 12:26:32,Luxury937,120,1,20,8,"Social, Gaming, Exercise",30,4,75,7,Home,
-10/9/2026 12:29:03,N/a (not doing project),120,5,10,7,"Eating, Doom scrolling",15,4,95,7,"Home, Lecture hall(but self-study in lecture hall)",
+10/9/2026 12:29:03,,120,5,10,7,"Eating, Doom scrolling",15,4,95,7,"Home, Lecture hall(but self-study in lecture hall)","studentID: Explicitly unavailable course ID; recorded as missing; response retained for eligibility review. Original: ""N/a (not doing project)""."
 10/9/2026 12:29:12,1011011325,120,3,15,6,"Eating, Scrolling Phone",8,3,75,5,"Home, Library",
 10/9/2026 12:30:32,00000,120,2,10,7,"Social, Youtube",15,3,65,5,"Home, Transit(in bus, subway, train, etc)",
 10/9/2026 12:30:49,LaTexSupremacy33,120,1,60,4,Gaming,8,3,75,6,Home,
 10/9/2026 12:31:37,neri826,180,1,10,3,Social,30,3,95,6,Library,
-10/9/2026 12:32:08,ears384,60,6,10,6,Social,2,4,55,4,"Home, Library",
+10/9/2026 12:32:08,ears384,60,6,10,6,Social,2,4,55,4,"Home, Library",num_breaks: Break count multiplied by duration meets/exceeds reported session length; verify interpretation and values before analysis. Original value retained.
 10/9/2026 13:36:28,Hairbrush9858,180,2,30,8,"Gaming, Eating",5,3,75,5,"Home, Library",
 10/9/2026 14:06:22,xxtrading,120,3,10,8,"Social, Eating",25,4,75,6,Library,
 10/9/2026 14:13:59,gengar092,120,1,10,4,"Social, Gaming",8,3,65,6,"Home, Library",
 10/9/2026 14:18:50,ascendedheros084,120,2,10,6,"Gaming, Eating",40,1,65,7,"Home, Library",
-10/9/2026 14:28:58,Affordable257,60,5,15,7,"Social, Napping, Eating",20,3,55,7,"Home, Library",
+10/9/2026 14:28:58,Affordable257,60,5,15,7,"Social, Napping, Eating",20,3,55,7,"Home, Library",num_breaks: Break count multiplied by duration meets/exceeds reported session length; verify interpretation and values before analysis. Original value retained.
 10/9/2026 14:30:29,halves937,180,1,10,4,"Social, Napping, Eating",40,3,75,7,"Home, Cafe",
-10/9/2026 14:32:37,sundried358,180,60,50,6,Social,45,3,75,6,Home,
+10/9/2026 14:32:37,sundried358,180,60,50,6,Social,45,3,75,6,Home,num_breaks: Break count multiplied by duration meets/exceeds reported session length; verify interpretation and values before analysis. Original value retained.
 10/9/2026 14:37:16,Expensive346,240,8,15,6,"Social, Exercise, Napping, Eating",28,3,85,6,"Home, Library",
 10/9/2026 17:25:26,02View,150,1,5,8,"Gaming, Exercise",10,3,85,7,Library,
-10/9/2026 17:44:57,melatonin032,180,3,20,4,Napping,20,3, ,7,"Home, Library",
+10/9/2026 17:44:57,melatonin032,180,3,20,4,Napping,20,3,,7,"Home, Library","prior_grade_pct: Whitespace-only missing entry standardized to blank. Original: "" ""."
 10/9/2026 18:18:57,sunflower346,180,3,45,3,"Social, Gaming",6,3,75,6,"Home, Library",
-10/9/2026 18:20:13,xXxEmails,60,0,60,6,"Gaming, Napping, Eating",10,3,85,4,"Library, Lecture hall(but self-study in lecture hall)",
-10/9/2026 20:01:36,CarletonUni,120,3,10,7,"Social, Napping",18,3, ,5,"Home, Library",
-10/9/2026 20:55:29,67Green,120,2,10,5,"Social, Eating",15,1, ,4,"Home, Library",
+10/9/2026 18:20:13,xXxEmails,60,0,60,6,"Gaming, Napping, Eating",10,3,85,4,"Library, Lecture hall(but self-study in lecture hall)",break_duration_min: Positive duration reported with zero breaks; requires clarification. Original value retained.
+10/9/2026 20:01:36,CarletonUni,120,3,10,7,"Social, Napping",18,3,,5,"Home, Library","prior_grade_pct: Whitespace-only missing entry standardized to blank. Original: "" ""."
+10/9/2026 20:55:29,67Green,120,2,10,5,"Social, Eating",15,1,,4,"Home, Library","prior_grade_pct: Whitespace-only missing entry standardized to blank. Original: "" ""."
