@@ -2,7 +2,7 @@
 # Input: unchanged copy of the new 57-record CSV and its codebook.
 # This script computes statistics, preparation and graphics in R.
 options(stringsAsFactors = FALSE, width = 78)
-needed <- c("datawizard", "bayestestR", "car", "jsonlite")
+needed <- c("datawizard", "car", "jsonlite")
 if (!all(vapply(needed, requireNamespace, logical(1), quietly = TRUE))) {
   stop("Install the required packages: ", paste(needed, collapse = ", "))
 }
@@ -36,7 +36,9 @@ labels <- c(study_session_min = "Study session duration (min)",
   prior_grade_pct = "Prior grade: band proxy (%)",
   break_helps_efficiency = "Break benefit agreement (1-7)")
 ds <- as.data.frame(datawizard::describe_distribution(d[names(labels)],
-  centrality = c("mean", "median")))
+  centrality = "all"))
+# Fix the quantile convention across package versions.
+ds$IQR <- vapply(d[ds$Variable], IQR, numeric(1), na.rm = TRUE, type = 6)
 write.csv(ds, "tables/easystats_summary.csv", row.names = FALSE)
 num <- data.frame(Variable = unname(labels[ds$Variable]), n = ds$n,
   Missing = ds$n_Missing, Mean = ds$Mean, Median = ds$Median,
@@ -56,7 +58,115 @@ agree <- freq(d$break_helps_efficiency, 1:7,
     "Slightly agree", "Agree", "Strongly agree"))
 memory <- freq(d$memory_retention, 1:10, as.character(1:10))
 al <- sort(unique(unlist(activities)))
-avalues <- c(Intercept = sprintf("%.5f", coef(ols)[1]),
+act <- data.frame(Category = al,
+  n = vapply(al, function(z) sum(has(z)), integer(1)))
+act$Category[act$Category == "Rotting on instagram specifically"] <-
+  "Instagram write-in"
+act$Percent <- 100 * act$n / nrow(d)
+loc <- split_multi(d$study_location)
+loc <- lapply(loc, function(z) {
+  z[z %in% c("UTM buildings like IB or MN",
+    "University Buildings (e.g. MN)")] <- "Other campus building"
+  z[z == "Lecture hall(but self-study in lecture hall)"] <- "Lecture hall"
+  z[z == "Transit(in bus, subway, train, etc)"] <- "Public transit"
+  z[z == "Outdoors(park, beach, etc)"] <- "Outdoors"
+  unique(z)
+})
+ll <- sort(unique(unlist(loc)))
+location <- data.frame(Category = c(ll, "Missing / unusable"),
+  n = c(vapply(ll, function(z) sum(vapply(loc,
+    function(v) z %in% v, logical(1))), integer(1)),
+    sum(lengths(loc) == 0)))
+location$Percent <- 100 * location$n / nrow(d)
+ex <- has("Exercise"); ga <- has("Gaming")
+d$activity_profile <- factor(ifelse(ex & ga, "Both",
+  ifelse(ex, "Exercise only", ifelse(ga, "Gaming only", "Neither"))),
+  levels = c("Exercise only", "Gaming only", "Neither", "Both"))
+breakers <- droplevels(d[d$num_breaks > 0, ])
+bt <- breakers[complete.cases(breakers[c("break_duration_min",
+  "memory_retention")]), ]
+ad <- droplevels(breakers[!is.na(breakers$memory_retention), ])
+# RQ1 follows the revised proposal: retain the numerical count and rating.
+rq1 <- lm(break_helps_efficiency ~ num_breaks, data = d)
+rq1_sm <- summary(rq1)
+rq1_ci <- confint(rq1)
+rq1_shapiro <- shapiro.test(residuals(rq1))
+rq1_ncv <- car::ncvTest(rq1)
+ols <- lm(memory_retention ~ break_duration_min, data = bt)
+av <- aov(memory_retention ~ activity_profile, data = ad)
+sm <- summary(ols); avtab <- summary(av)[[1]]; ci <- confint(ols)
+sh_ols <- shapiro.test(residuals(ols)); ncv <- car::ncvTest(ols)
+sh_av <- shapiro.test(residuals(av))
+lev <- car::leveneTest(memory_retention ~ activity_profile,
+  data = ad, center = median)
+coeff <- data.frame(Term = c("Intercept", "Break duration (min)"),
+  Estimate = unname(coef(ols)), SE = sm$coefficients[, 2],
+  t = sm$coefficients[, 3], p = sm$coefficients[, 4],
+  Lower = ci[, 1], Upper = ci[, 2], row.names = NULL)
+fit <- data.frame(n = nrow(bt), Residual_df = df.residual(ols),
+  R_squared = sm$r.squared, Adjusted_R_squared = sm$adj.r.squared,
+  Residual_SE = sm$sigma, F = unname(sm$fstatistic[1]))
+tests <- data.frame(Question = c("RQ1", "RQ2", "RQ3"),
+  Test = c("Simple linear regression", "Simple linear regression", "One-way ANOVA"),
+  n = c(nrow(d), nrow(bt), nrow(ad)),
+  Statistic = c(rq1_sm$coefficients[2, 3], sm$coefficients[2, 3],
+    avtab[1, "F value"]),
+  p = c(rq1_sm$coefficients[2, 4], sm$coefficients[2, 4], avtab[1, "Pr(>F)"]))
+tests$Holm_p <- p.adjust(tests$p, method = "holm")
+groups <- do.call(rbind, lapply(split(ad$memory_retention,
+  ad$activity_profile), function(z) c(n = length(z), Mean = mean(z),
+    SD = sd(z), Median = median(z))))
+groups <- data.frame(Profile = rownames(groups), groups, row.names = NULL)
+checks <- data.frame(Model = c("RQ1", "RQ1", "RQ2", "RQ2", "RQ3", "RQ3"),
+  Check = rep(c("Shapiro-Wilk residual normality", "Variance score test"), 3),
+  p = c(rq1_shapiro$p.value, rq1_ncv$p, sh_ols$p.value, ncv$p,
+    sh_av$p.value, lev[1, "Pr(>F)"]))
+checks$Check[6] <- "Median-centered Levene test"
+rq1_coeff <- data.frame(Term = c("Intercept", "Break count"),
+  Estimate = unname(coef(rq1)), SE = rq1_sm$coefficients[, 2],
+  t = rq1_sm$coefficients[, 3], p = rq1_sm$coefficients[, 4],
+  Lower = rq1_ci[, 1], Upper = rq1_ci[, 2], row.names = NULL)
+cooks <- cooks.distance(ols)
+influence <- data.frame(record = bt$record, fitted = fitted(ols),
+  residual = residuals(ols), standardized_residual = rstandard(ols),
+  leverage = hatvalues(ols), cooks_distance = cooks)
+safe <- d[setdiff(names(d), c("studentID", "timestamp", "data_notes"))]
+write.csv(safe, "analysis_ready.csv", row.names = FALSE, na = "")
+write.csv(bt[c("record", "break_duration_min", "memory_retention")],
+  "regression_data.csv", row.names = FALSE)
+write.csv(raw[c("record", "bad_id", "bad_time", "bad_week", "excluded")],
+  "tables/record_audit.csv", row.names = FALSE)
+write.csv(influence, "tables/regression_influence.csv", row.names = FALSE)
+write.csv(fit, "tables/model_fit.csv", row.names = FALSE)
+all_tables <- list(rq1_coefficients = rq1_coeff, numeric = num, year = year, grade = grade,
+  agreement = agree, retention = memory, activities = act,
+  locations = location, model_coefficients = coeff, primary_tests = tests,
+  group_summary = groups, assumption_checks = checks)
+tex_escape <- function(x) {
+  x <- gsub("%", "\\%", x, fixed = TRUE)
+  x <- gsub("&", "\\&", x, fixed = TRUE)
+  gsub("_", "\\_", x, fixed = TRUE)
+}
+for (nm in names(all_tables)) {
+  tb <- all_tables[[nm]]
+  write.csv(tb, paste0("tables/", nm, ".csv"), row.names = FALSE)
+  display <- tb
+  for (cn in names(tb)) {
+    if (is.numeric(tb[[cn]])) {
+      dp <- if (cn %in% c("n", "Missing")) 0 else
+        if (cn == "Percent") 1 else
+        if (nm %in% c("model_coefficients", "rq1_coefficients", "assumption_checks")) 5 else
+        if (cn %in% c("p", "Holm_p")) 4 else 2
+      display[[cn]] <- formatC(tb[[cn]], format = "f", digits = dp)
+      if (cn == "p") display[[cn]][tb[[cn]] < .00001] <- "$<0.00001$"
+    }
+    display[[cn]] <- tex_escape(display[[cn]])
+  }
+  lines <- apply(display, 1, function(z)
+    paste0(paste(z, collapse = " & "), " \\\\"))
+  writeLines(c(lines, "\\bottomrule"), paste0("tables/", nm, ".tex"))
+}
+values <- c(Intercept = sprintf("%.5f", coef(ols)[1]),
   Slope = sprintf("%.6f", coef(ols)[2]),
   SlopeP = sprintf("%.4f", coeff$p[2]),
   SlopeT = sprintf("%.3f", coeff$t[2]),
@@ -77,12 +187,21 @@ avalues <- c(Intercept = sprintf("%.5f", coef(ols)[1]),
   RQOneP = sprintf("%.4f", rq1_sm$coefficients[2, 4]),
   RQOneLo = sprintf("%.5f", rq1_ci[2, 1]),
   RQOneHi = sprintf("%.5f", rq1_ci[2, 2]),
+  RQOneRSquared = sprintf("%.4f", rq1_sm$r.squared),
+  RQOneShapiro = sprintf("%.5f", rq1_shapiro$p.value),
+  RQOneNCV = sprintf("%.5f", rq1_ncv$p),
+  RQOneHolm = sprintf("%.4f", tests$Holm_p[1]),
   AnovaF = sprintf("%.3f", avtab[1, "F value"]),
   AnovaP = sprintf("%.4f", avtab[1, "Pr(>F)"]),
   EtaSquared = sprintf("%.3f", avtab[1, "Sum Sq"] / sum(avtab[, "Sum Sq"])))
 names(values) <- sub("\\..*$", "", names(values))
 writeLines(paste0("\\newcommand{\\", names(values), "}{", values, "}"),
   "tables/report_values.tex")
+memory_lines <- c(
+  paste0("Count & ", paste(memory$n[1:10], collapse = " & "), " \\\\"),
+  paste0("\\% of 48 & ", paste(sprintf("%.1f", memory$Percent[1:10]),
+    collapse = " & "), " \\\\"), "\\bottomrule")
+writeLines(memory_lines, "tables/retention_wide.tex")
 navy <- "#23425A"; teal <- "#238A8D"; red <- "#B44B45"
 pdf("figures/rq1_results.pdf", width = 7.2, height = 2.5)
 par(mar = c(4, 4, 1, 1), cex = .85, las = 1)
