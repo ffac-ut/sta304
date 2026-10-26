@@ -1,6 +1,6 @@
 # STA304 EDA. Run Rscript analysis.R from the submission folder.
 # Input: unchanged copy of the new 57-record CSV and its codebook.
-# All statistics, preparation and graphics are computed in R.
+# This script computes statistics, preparation and graphics in R.
 options(stringsAsFactors = FALSE, width = 78)
 needed <- c("datawizard", "bayestestR", "car", "jsonlite")
 if (!all(vapply(needed, requireNamespace, logical(1), quietly = TRUE))) {
@@ -48,7 +48,7 @@ freq <- function(x, levels, labels = levels) {
   data.frame(Category = c(labels, "Missing / unavailable"),
     n = as.integer(z), Percent = 100 * as.integer(z) / length(x))
 }
-year <- freq(d$year_of_study, 1:5, paste("Year", 1:5))
+year <- freq(d$year_of_study, 1:5, paste("Recorded code", 1:5))
 grade <- freq(d$prior_grade_pct, c(55, 65, 75, 85, 95),
   c("50-59%", "60-69%", "70-79%", "80-89%", "90-100%"))
 agree <- freq(d$break_helps_efficiency, 1:7,
@@ -56,119 +56,7 @@ agree <- freq(d$break_helps_efficiency, 1:7,
     "Slightly agree", "Agree", "Strongly agree"))
 memory <- freq(d$memory_retention, 1:10, as.character(1:10))
 al <- sort(unique(unlist(activities)))
-act <- data.frame(Category = al,
-  n = vapply(al, function(z) sum(has(z)), integer(1)))
-act$Category[act$Category == "Rotting on instagram specifically"] <-
-  "Instagram write-in"
-act$Percent <- 100 * act$n / nrow(d)
-loc <- split_multi(d$study_location)
-loc <- lapply(loc, function(z) {
-  z[z %in% c("UTM buildings like IB or MN",
-    "University Buildings (e.g. MN)")] <- "Other campus building"
-  z[z == "Lecture hall(but self-study in lecture hall)"] <- "Lecture hall"
-  z[z == "Transit(in bus, subway, train, etc)"] <- "Public transit"
-  z[z == "Outdoors(park, beach, etc)"] <- "Outdoors"
-  unique(z)
-})
-ll <- sort(unique(unlist(loc)))
-location <- data.frame(Category = c(ll, "Missing / unusable"),
-  n = c(vapply(ll, function(z) sum(vapply(loc,
-    function(v) z %in% v, logical(1))), integer(1)),
-    sum(lengths(loc) == 0)))
-location$Percent <- 100 * location$n / nrow(d)
-ex <- has("Exercise"); ga <- has("Gaming")
-d$activity_profile <- factor(ifelse(ex & ga, "Both",
-  ifelse(ex, "Exercise only", ifelse(ga, "Gaming only", "Neither"))),
-  levels = c("Exercise only", "Gaming only", "Neither", "Both"))
-d$break_count_group <- cut(d$num_breaks, c(-1, 0, 1, 2, 3, Inf),
-  labels = c("0", "1", "2", "3", "4+"))
-d$agreement_group <- cut(d$break_helps_efficiency, c(0, 3, 4, 7),
-  labels = c("Disagree (1-3)", "Neutral (4)", "Agree (5-7)"))
-breakers <- droplevels(d[d$num_breaks > 0, ])
-bt <- breakers[complete.cases(breakers[c("break_duration_min",
-  "memory_retention")]), ]
-ad <- droplevels(breakers[!is.na(breakers$memory_retention), ])
-# Only the three analyses listed in proposal_reference.txt are fitted below.
-cross <- with(d, table(break_count_group, agreement_group))
-# Preserve the planned Pearson test. Sparse expected counts are explicitly
-# reported as a limitation; no replacement test is substituted.
-chi <- suppressWarnings(chisq.test(cross, correct = FALSE))
-ols <- lm(memory_retention ~ break_duration_min, data = bt)
-av <- aov(memory_retention ~ activity_profile, data = ad)
-sm <- summary(ols); avtab <- summary(av)[[1]]; ci <- confint(ols)
-sh_ols <- shapiro.test(residuals(ols)); ncv <- car::ncvTest(ols)
-sh_av <- shapiro.test(residuals(av))
-lev <- car::leveneTest(memory_retention ~ activity_profile,
-  data = ad, center = median)
-coeff <- data.frame(Term = c("Intercept", "Break duration (min)"),
-  Estimate = unname(coef(ols)), SE = sm$coefficients[, 2],
-  t = sm$coefficients[, 3], p = sm$coefficients[, 4],
-  Lower = ci[, 1], Upper = ci[, 2], row.names = NULL)
-fit <- data.frame(n = nrow(bt), Residual_df = df.residual(ols),
-  R_squared = sm$r.squared, Adjusted_R_squared = sm$adj.r.squared,
-  Residual_SE = sm$sigma, F = unname(sm$fstatistic[1]))
-tests <- data.frame(Question = c("RQ1", "RQ2", "RQ3"),
-  Test = c("Pearson chi-square", "Simple linear regression", "One-way ANOVA"),
-  n = c(nrow(d), nrow(bt), nrow(ad)),
-  Statistic = c(unname(chi$statistic), sm$coefficients[2, 3],
-    avtab[1, "F value"]),
-  p = c(chi$p.value, sm$coefficients[2, 4], avtab[1, "Pr(>F)"]))
-groups <- do.call(rbind, lapply(split(ad$memory_retention,
-  ad$activity_profile), function(z) c(n = length(z), Mean = mean(z),
-    SD = sd(z), Median = median(z))))
-groups <- data.frame(Profile = rownames(groups), groups, row.names = NULL)
-checks <- data.frame(Model = c("Regression", "Regression", "ANOVA", "ANOVA"),
-  Check = c("Shapiro-Wilk residual normality", "Variance score test",
-    "Shapiro-Wilk residual normality", "Median-centered Levene test"),
-  p = c(sh_ols$p.value, ncv$p, sh_av$p.value, lev[1, "Pr(>F)"]))
-cooks <- cooks.distance(ols)
-influence <- data.frame(record = bt$record, fitted = fitted(ols),
-  residual = residuals(ols), standardized_residual = rstandard(ols),
-  leverage = hatvalues(ols), cooks_distance = cooks)
-safe <- d[setdiff(names(d), c("studentID", "timestamp", "data_notes"))]
-write.csv(safe, "analysis_ready.csv", row.names = FALSE, na = "")
-write.csv(bt[c("record", "break_duration_min", "memory_retention")],
-  "regression_data.csv", row.names = FALSE)
-write.csv(raw[c("record", "bad_id", "bad_time", "bad_week", "excluded")],
-  "tables/record_audit.csv", row.names = FALSE)
-write.csv(influence, "tables/regression_influence.csv", row.names = FALSE)
-write.csv(fit, "tables/model_fit.csv", row.names = FALSE)
-write.csv(as.data.frame.matrix(chi$expected),
-  "tables/expected_counts.csv", row.names = TRUE)
-all_tables <- list(numeric = num, year = year, grade = grade,
-  agreement = agree, retention = memory, activities = act,
-  locations = location, model_coefficients = coeff, primary_tests = tests,
-  group_summary = groups, assumption_checks = checks)
-tex_escape <- function(x) {
-  x <- gsub("%", "\\%", x, fixed = TRUE)
-  x <- gsub("&", "\\&", x, fixed = TRUE)
-  gsub("_", "\\_", x, fixed = TRUE)
-}
-for (nm in names(all_tables)) {
-  tb <- all_tables[[nm]]
-  write.csv(tb, paste0("tables/", nm, ".csv"), row.names = FALSE)
-  display <- tb
-  for (cn in names(tb)) {
-    if (is.numeric(tb[[cn]])) {
-      dp <- if (cn %in% c("n", "Missing")) 0 else
-        if (cn == "Percent") 1 else
-        if (nm %in% c("model_coefficients", "assumption_checks")) 5 else
-        if (cn == "p") 4 else 2
-      display[[cn]] <- formatC(tb[[cn]], format = "f", digits = dp)
-      if (cn == "p") display[[cn]][tb[[cn]] < .00001] <- "$<0.00001$"
-    }
-    display[[cn]] <- tex_escape(display[[cn]])
-  }
-  lines <- apply(display, 1, function(z)
-    paste0(paste(z, collapse = " & "), " \\\\"))
-  writeLines(c(lines, "\\bottomrule"), paste0("tables/", nm, ".tex"))
-}
-ct <- data.frame(Breaks = rownames(cross), unclass(cross), check.names = FALSE)
-write.csv(ct, "tables/contingency.csv", row.names = FALSE)
-ct_lines <- apply(ct, 1, function(z)
-  paste0(paste(z, collapse = " & "), " \\\\"))
-writeLines(c(ct_lines, "\\bottomrule"), "tables/contingency.tex")
-values <- c(Intercept = sprintf("%.5f", coef(ols)[1]),
+avalues <- c(Intercept = sprintf("%.5f", coef(ols)[1]),
   Slope = sprintf("%.6f", coef(ols)[2]),
   SlopeP = sprintf("%.4f", coeff$p[2]),
   SlopeT = sprintf("%.3f", coeff$t[2]),
@@ -185,9 +73,10 @@ values <- c(Intercept = sprintf("%.5f", coef(ols)[1]),
   NCVP = sprintf("%.5f", ncv$p),
   MaxCook = sprintf("%.2f", max(cooks)),
   MaxHat = sprintf("%.3f", max(hatvalues(ols))),
-  ChiStat = sprintf("%.3f", chi$statistic),
-  ChiP = sprintf("%.4f", chi$p.value),
-  ExpectedMin = sprintf("%.3f", min(chi$expected)),
+  RQOneSlope = sprintf("%.5f", coef(rq1)[2]),
+  RQOneP = sprintf("%.4f", rq1_sm$coefficients[2, 4]),
+  RQOneLo = sprintf("%.5f", rq1_ci[2, 1]),
+  RQOneHi = sprintf("%.5f", rq1_ci[2, 2]),
   AnovaF = sprintf("%.3f", avtab[1, "F value"]),
   AnovaP = sprintf("%.4f", avtab[1, "Pr(>F)"]),
   EtaSquared = sprintf("%.3f", avtab[1, "Sum Sq"] / sum(avtab[, "Sum Sq"])))
@@ -195,6 +84,23 @@ names(values) <- sub("\\..*$", "", names(values))
 writeLines(paste0("\\newcommand{\\", names(values), "}{", values, "}"),
   "tables/report_values.tex")
 navy <- "#23425A"; teal <- "#238A8D"; red <- "#B44B45"
+pdf("figures/rq1_results.pdf", width = 7.2, height = 2.5)
+par(mar = c(4, 4, 1, 1), cex = .85, las = 1)
+set.seed(304)
+plot(jitter(d$num_breaks, amount = .07),
+  jitter(d$break_helps_efficiency, amount = .05), pch = 19, col = navy,
+  xlab = "Breaks per study session", ylab = "Benefit agreement (1-7)")
+abline(rq1, col = teal, lwd = 2)
+dev.off()
+pdf("figures/rq1_diagnostics.pdf", width = 7.2, height = 2.5)
+par(mfrow = c(1, 2), mar = c(4, 4, 2, 1), cex = .8, las = 1)
+plot(fitted(rq1), residuals(rq1), pch = 19, col = navy,
+  xlab = "Fitted agreement", ylab = "Residual", main = "RQ1: residual spread")
+abline(h = 0, lty = 2, col = "grey55")
+lines(lowess(fitted(rq1), residuals(rq1)), col = teal, lwd = 2)
+qqnorm(residuals(rq1), pch = 19, col = navy, main = "RQ1: normal Q-Q")
+qqline(residuals(rq1), col = teal, lwd = 2)
+dev.off()
 pdf("figures/descriptive_distributions.pdf", width = 7.2, height = 2.65)
 par(mfrow = c(1, 2), mar = c(4.1, 3.9, 2.2, .7), cex = .82, las = 1)
 hist(bt$break_duration_min, breaks = seq(0, 125, 5), col = "#DCE9EE",
@@ -287,9 +193,9 @@ result <- list(method_reference = "proposal_reference.txt",
   weekly_outlier_records = raw$record[raw$bad_week],
   numeric_summary = num, coefficients = coeff, model_fit = fit,
   primary_tests = tests, activity_groups = groups, assumptions = checks,
-  chi_square = list(df = unname(chi$parameter),
-    expected_min = min(chi$expected), expected_under5 = sum(chi$expected < 5),
-    expected_cells = length(chi$expected), approximation_unreliable = TRUE),
+  rq1 = list(coefficients = rq1_coeff, r_squared = rq1_sm$r.squared,
+    residual_df = df.residual(rq1), shapiro_p = rq1_shapiro$p.value,
+    variance_score_p = rq1_ncv$p),
   anova = list(df1 = avtab[1, "Df"], df2 = avtab[2, "Df"],
     eta_squared = avtab[1, "Sum Sq"] / sum(avtab[, "Sum Sq"])),
   influence = list(max_cook_record = bt$record[im],
