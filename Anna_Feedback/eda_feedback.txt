@@ -1,0 +1,65 @@
+STA304 Exploratory Data Analysis Feedback
+
+Disclaimer: in the process of constructing feedback, I recorded my audio and got AI to rephrase my feedback in a concise, clear manner so that I can mark faster + you get more detailed feedback. I did not run any of the assignments through AI.
+
+I find it hilarious that you rendered and wrote a new proposal for this checkpoint.
+
+Wording and use of AI
+
+Like other groups, you have a major problem with wording. Based on the writing, the report seems to depend heavily on an LLM instead of on the course resources. Some of the content includes facts you would not be expected to know at this point. If you use AI, use it to get correct information on how to do data analysis. Do not use material outside the scope of the curriculum, because I can tell.
+
+On a lighter note, "easystats ecosystem" is a term I coined, so it was a bit uncanny to see someone else use it in "Generated with datawizard::describe_distribution() from the easystats ecosystem."
+
+Table 2 caption
+
+I am not sure what the sentence "Administrative fields are not substantive variables" means in the Table 2 caption. Say which fields you mean and why they matter for the table.
+
+Normality in the summary statistics
+
+You say similar means and medians alone do not establish normality. This does not need to be referenced when looking at summary statistics. Whether something is Gaussian comes up later, in the assumption checks. This sentence can be cut.
+
+Caption on location splitting
+
+This caption is vague. It says location splitting preserves commas inside parentheses, campus-building aliases are combined, activities have no missing responses, and one location is unusable. Elaborate on what you did to the location variable, why you did it, and what the unusable location means for the results.
+
+Figure 1 caption
+
+There is a better way to phrase this caption. Your retention variable comes from a Likert question from 1 to 7, so saying it is bounded and discrete is obvious from the data. I also do not know why you discuss residual diagnostics when you are only showing a histogram of discrete variables. It is out of place. A caption should briefly say what each panel shows and what the reader should notice.
+
+Multiplicity correction
+
+You say the p-values are reported without a multiplicity correction. A multiplicity correction is outside the scope of this course. If you are concerned about false positives, either adjust for them and show how to do it properly, or omit the point altogether. It reads as though the idea came from an LLM. Do not use things outside the scope of the curriculum.
+
+Chi-square test
+
+The way you describe the chi-square test is awkward. You note that 11 of 15 expected counts are below 5, that the minimum is 0.083, and that the expected-count requirement is substantially violated. You then say the p-value cannot support a reliable significance claim and that no alternative test is introduced. I permit proceeding with the planned analysis when an assumption is violated, so my concern is the wording and not the test itself. When you notice a violation, my Hypothesis Testing & Statistical Tests Review document (https://annahuynhly.github.io/pages/teaching/STA304/Review.pdf) explains what you can do, which is Fisher's exact test as the nonparametric alternative. I would prefer you use it.
+
+Observed direction passage
+
+I do not understand the passage on the observed direction. What do you mean by higher counts accompanying more favorable beliefs descriptively? Based on Table 6, most respondents seem to like one to three breaks per study session.
+
+ANOVA
+
+I permit reporting violated assumptions and proceeding with the planned analysis. However, my guide offers a nonparametric alternative to ANOVA, and it is quite easy to implement. I would prefer you use the nonparametric alternative when it is discussed in the guide.
+
+Preparation limitations
+
+I do not understand your limitations regarding preparation. You list the missing-ID and timing exclusions, the structural missing durations for zero-break cases, and the variable-level weekly-hour exclusions, and then say flags alone do not prove invalidity. Say directly which exclusions you made, why, and how they might affect the analysis sample.
+
+Year prompt
+
+You say the year prompt is problematic. Explain why you call it problematic.
+
+Grade breakdown
+
+Graphs / Tables (0.4 / 0.5)
+Captions that briefly interpret the result (0.05 / 0.15). I deducted 0.1 because the Table 2 caption is unclear, the location caption is vague, and the Figure 1 caption states obvious facts and mentions residual diagnostics that do not belong.
+
+Checking Model Assumptions (0.33 / 0.4)
+Interpretation of whether the assumptions were violated (0.03 / 0.1). I deducted 0.07 because the passages about the violated assumptions are unclear. The chi-square expected-count paragraph is awkwardly worded, and the ANOVA and preparation passages do not say clearly what the limitations are.
+
+Computing Statistical Tests (0.27 / 0.4)
+Appropriate test or model computed and reported (0.19 / 0.25). I deducted 0.06 because the chi-square and ANOVA results are reported in awkward wording that makes the conclusions hard to follow.
+Directional conclusions for significant effects (0.08 / 0.15). I deducted 0.07 because the passage on the observed direction is unclear and does not match what Table 6 shows.
+
+Total (1.70 / 2)
